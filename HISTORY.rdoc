@@ -1,0 +1,8 @@
+
+=== 0.9.0 / 2010-10-02
+
+Initial version, developed along with {RDoc}[http://github.com/rdoc/rdoc] 3.0.
+
+=== 0.9.1 / 2011-07-16
+
+First public release.

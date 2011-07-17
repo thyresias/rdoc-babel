@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=<%= @options.charset %>" />
+  <title><%= @class.type.capitalize %> <%= @class.full_name %></title>
+  <link href="<%= @stylesheet_url %>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<%= @rel_prefix %>/scripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="<%= @rel_prefix %>/scripts/mainFrame.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+
+<div id="header">
+  <p class="header-title">
+    <span class="prefix"><%= @class.type.capitalize %></span><span class="name"> <%= @class.full_name %></span>
+  </p>
+  <% if @class.type == 'class' && @class.superclass %>
+    <p class="header-title">
+    <% if String === @class.superclass %>
+      <span class="parent"> &lt; <%= @class.superclass %></span>
+    <% else %>
+      </span><span class="parent"> &lt; <a href="<%= @class.aref_to @class.superclass.path %>"><%= @class.superclass.full_name %></a></span>
+    <% end %>
+    </p>
+  <% end %>
+  <p id="file-info">
+  <% if @class.in_files.length < 3 %>
+    <span class="displayed">
+      <span class="in-files">In:</span>
+      <span class="first-files">
+      <% @class.in_files.each do |f| %>
+        <a href="<%= @rel_prefix %>/<%= h f.path %>"><%= h f.full_name %></a><br/>
+      <% end %>
+      </span>
+    </span>
+    <span class="hidden">
+      <span class="in-files">In:</span>
+      <span class="first-files">
+      <% @class.in_files.each do |f| %>
+        <a href="#"><%= h f.full_name %></a><br/>
+      <% end %>
+      </span>
+    </span>
+  <% else %>
+    <span class="displayed">
+      <span class="in-files">In:</span>
+      <span class="first-files">
+        <a href="<%= @rel_prefix %>/<%= h @class.in_files.first.path %>"><%= h @class.in_files.first.full_name %></a><br/>
+        <a href="#" id="show-all-files">(<%= @class.in_files.length - 1 %> more...)</a>
+      </span>
+    </span>
+    <span class="hidden">
+      <span class="in-files">In:</span>
+      <span class="first-files">
+        <a href="#"><%= h @class.in_files.first.full_name %></a><br/>
+        <a href="#" id="show-all-files">(<%= @class.in_files.length - 1 %> more...)</a>
+      </span>
+    </span>
+    <br/>
+    <span id="all-files">
+    <% @class.in_files[1..-1].each do |f| %>
+      <a href="<%= @rel_prefix %>/<%= h f.path %>"><%= h f.full_name %></a><br/>
+    <% end %>
+    </span>
+  <% end %>
+  </p>
+</div>
+
+<div id="documentation">
+
+<%= @class.description %>
+
+<!-- class/module aliases -->
+<% unless @class.aliases.empty? %>
+<div id="class-aliases" class="list">
+  <h3><%= @class.type.capitalize %> Aliases</h3>
+  <ul>
+    <% @class.aliases.each do |a| %>
+    <li><%= a.full_name %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<!-- list of methods -->
+<% unless @class.method_list.empty? %>
+<div id="method-list" class="list">
+  <h3>Methods</h3>
+  <% unless @class.class_method_list.empty? %>
+    <ul>
+      <% @class.class_method_list.sort.each do |m| %>
+      <% litag = m.documented? ? '<li>' : '<li class="nodoc">' %>
+      <%= litag %><a href="#<%= m.aref %>"><span class="type">::</span><%= h m.name %></a></li>
+      <% end %>
+    </ul>
+  <% end %>
+  <% unless @class.instance_method_list.empty? %>
+    <ul>
+      <% @class.instance_method_list.sort.each do |m| %>
+      <% litag = m.documented? ? '<li>' : '<li class="nodoc">' %>
+      <%= litag %><a href="#<%= m.aref %>"><span class="type"><%= @options.show_hash ? '#' : '' %></span><%= h m.name %></a></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+<% end %>
+
+<!-- namespace contents -->
+<% unless @class.non_aliases.empty? %>
+<div id="namespace-list" class="list">
+  <h3>Modules and Classes</h3>
+  <table class="classes-modules">
+  <% @class.non_aliases.sort.each do |cm| %>
+    <tr>
+      <td><%= cm.type.capitalize %></td>
+      <td><a href="<%= @class.aref_to cm.path %>"><%= cm.name %></a></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<% end %>
+
+<!-- included modules -->
+<% unless @class.includes.empty? %>
+<div id="include-list" class="list">
+  <h3>Included Modules</h3>
+  <ul>
+  <% @class.includes.each do |inc| %>
+  <% if String === inc.module %>
+    <li><%= inc.name %></li>
+  <% else %>
+    <li><a href="<%= @class.aref_to inc.module.path %>"><%= inc.module.full_name %></a></li>
+  <% end %>
+  <% end %>
+  </ul>
+</div>
+<% end %>
+
+<!-- constants -->
+<% unless @class.constants.empty? %>
+<div id="constant-list" class="list">
+  <h3>Constants</h3>
+  <table>
+  <% @class.constants.each do |const| %>
+    <tr id="<%= const.name %>" class="const-display">
+      <td class="const-name"><p><%= const.name %></p></td>
+      <td class="const-desc">
+        <% if (cm = const.is_alias_for) %>
+          <p>Alias for <%= cm.type %> <a href="<%= @class.aref_to cm.path %>"><%= cm.full_name %></a></p>
+        <% else %>
+          <%= const.description.strip %>
+        <% end %>
+      </td>
+    <td><p class="click-advice">click to toggle value</p></td>
+    </tr>
+    <tr class="const-value">
+      <td></td>
+      <td><pre><%= h(const.value) %></pre></td>
+      <td></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<% end %>
+
+<!-- external aliases -->
+<% unless @class.external_aliases.empty? %>
+<div id="external-aliases" class="list">
+  <h3>External Aliases</h3>
+  <table>
+  <% @class.external_aliases.each do |a| %>
+    <tr id="<%= a.aref %>">
+      <td class="attr-name"><p><%= h a.name %></p></td>
+      <td class="attr-desc"><%= a.comment.empty? ? "<p>Alias for #{a.full_old_name}.</p>" : a.description.strip %></td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<% end %>
+
+<!-- class/module attributes -->
+<% unless @class.class_attributes.empty? %>
+<div id="class-attributes" class="list">
+  <h3><%= @class.type.capitalize %> Attributes</h3>
+  <table>
+  <% @class.class_attributes.each do |a| %>
+    <tr id="<%= a.aref %>">
+      <td class="attr-rw"><p><%= a.rw %></p></td>
+      <td class="attr-name"><p><%= h a.name %></p></td>
+      <td class="attr-desc">
+        <% if a.comment.empty? %>
+          <% if a.see %>
+            <p<%= a.see.documented? ? '' : ' class="nodoc"' %>>
+              See <a href="<%= @class.aref_to a.see.path %>"><%= h a.see.name %></a>
+            </p>
+          <% end %>
+        <% else %>
+          <%= a.description.strip %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<% end %>
+
+<!-- instance attributes -->
+<% unless @class.instance_attributes.empty? %>
+<div id="instance-attributes" class="list">
+  <h3>Instance Attributes</h3>
+  <table>
+  <% @class.instance_attributes.each do |a| %>
+    <tr id="<%= a.aref %>">
+      <td class="attr-rw"><p><%= a.rw %></p></td>
+      <td class="attr-name"><p><%= h a.name %></p></td>
+      <td class="attr-desc">
+        <% if a.comment.empty? %>
+          <% if a.see %>
+            <p<%= a.see.documented? ? '' : ' class="nodoc"' %>>
+              See <a href="<%= @class.aref_to a.see.path %>"><%= h a.see.name %></a>
+            </p>
+          <% end %>
+        <% else %>
+          <%= a.description.strip %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+</div>
+<% end %>
+
+<% @class.methods_by_type.each do |type, visibilities| # loop on types of method (class/instance)
+   next if visibilities.empty?
+   visibilities.each do |visibility, methods|
+     next if methods.empty?
+%>
+<h2 id="<%= visibility %>-<%= type %>-methods"><%= visibility.to_s.capitalize %> <%= type.capitalize %> Methods</h2>
+<% methods.each do |method| %>
+  <div id="<%= method.aref %>" class="method-detail<%= method.is_alias_for ? ' method-alias' : '' %>">
+    <div class="method-heading">
+    <% if method.call_seq %>
+      <span class="method-call-seq"><%= decorated_call_seq(method, 'method-name') %></span>
+    <% else %>
+      <span class="method-name"><%= h method.name %></span><span class="method-args"><%= method.params %></span>
+      <% if method.block_params %>
+        <% if method.block_params.empty? %>
+          <span class="method-block">{ ... }</span>
+        <% else %>
+          <span class="method-block">{ |<%= method.block_params %>| ... }</span>
+        <% end %>
+      <% end %>
+    <% end %>
+    <% unless method.is_alias_for %>
+      <span class="click-advice">click to toggle source</span>
+    <% end %>
+    </div>
+    <div class="method-description">
+      <%= description(method) %>
+      <% if method.token_stream %>
+<pre class="method-source-code"><%= method.markup_code %></pre>
+      <% end %>
+    </div>
+
+  </div> <!-- #<%= method.aref %> -->
+<% end # methods.each %>
+<% end # visibilities.each %>
+<% end # @class.methods_by_type.each %>
+
+</div> <!-- #documentation -->
+
+</body>
+</html>

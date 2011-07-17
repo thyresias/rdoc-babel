@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=<%= @options.charset %>" />
+  <title>File <%= @file.base_name %></title>
+  <link href="<%= @stylesheet_url %>" media="all" rel="stylesheet" type="text/css" />
+  <script src="<%= @rel_prefix %>/scripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="<%= @rel_prefix %>/scripts/mainFrame.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div id="header">
+  <p class="header-title"><span class="prefix">File</span><span class="name"> <%= @file.base_name %></span></p>
+  <p id="file-info">
+    <span class="displayed">
+      Path: <%= @file.absolute_name %><br/>
+      Modified: <%= @file.last_modified ? @file.last_modified.strftime('%Y-%m-%d %H:%M:%S') : 'unknown' %>
+    </span>
+  </p>
+</div>
+<div id="documentation">
+<% if @file.parser == RDoc::Parser::Simple %>
+  <%= @file.description %>
+<% else %>
+  <% unless @file.comment.empty? %>
+    <% unless @file.description =~ /^\s*<h[1-6]/ %>
+      <h2>Description</h2>
+    <% end %>
+    <%= @file.description %>
+  <% end %>
+  <div id="file-details" class="list">
+  <% unless @file.requires.empty? %>
+    <h3>Requires</h3>
+    <ul>
+    <% @file.requires.each do |r| %>
+      <% if (tl = r.top_level) %>
+        <li><a href="<%= @rel_prefix %>/<%= h tl.path %>"><%= r.name %></a></li>
+      <% else %>
+        <li><%= r.name %></li>
+      <% end %>
+    <% end %>
+    </ul>
+  <% end %>
+  <% unless @file.modules.length + @file.classes.length == 0 %>
+    <h3>Classes and Modules</h3>
+    <table class="classes-modules">
+    <% @file.classes_and_modules.sort.each do |cm| %>
+      <tr>
+        <td><%= cm.type.capitalize %></td>
+        <td><a href="<%= @rel_prefix %>/<%= h cm.path %>"><%= cm.full_name %></a></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
+  <% if @options.webcvs %>
+    <h3>Trac URL</h3>
+    <p><a href="<%= @file.cvs_url %>"><%= @file.cvs_url %></a></p>
+  <% end %>
+  </div>
+<% end %>
+</div>
+</body>
+</html>

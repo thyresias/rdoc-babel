@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=<%= @options.charset %>" />
+  <title>Index of <%= @simple_files.empty? ? '' : 'Files, ' %> Classes &amp; Methods in <%= h @options.title %></title>
+  <link href="<%= @stylesheet_url %>" media="all" rel="stylesheet" type="text/css" />
+  <script src="scripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/jquery.quicksearch.js" type="text/javascript" charset="utf-8"></script>
+  <script src="scripts/indexFrame.js" type="text/javascript" charset="utf-8"></script>
+  <base target="mainFrame"/>
+</head>
+<body class="index">
+<% $stderr.sync = true %>
+<% unless @files_to_display.empty? %>
+  <div id="file-index">
+    <div class="title">Files</div>
+    <div class="entries">
+    <% @files_to_display.each do |file| %>
+      <p><a href="<%= file.path %>"><%= h file.absolute_name %></a></p>
+    <% end %>
+    </div>
+  </div>
+<% end %>
+  <div id="class-index">
+    <div class="title">
+      <span class="text">Classes </span><input type="text" value="" class="search-field" />
+    </div>
+    <div class="entries">
+    <% @all_classes_and_modules.each do |k| %>
+      <p class="<%= k.any_content ? k.type : k.type + ' nodoc' %>">
+        <span class="type"><%= k.type[0..0].upcase %></span><a href="<%= k.path %>"><%= k.full_name + (k.is_alias_for ? ' &rarr; ' << k.is_alias_for.full_name : '') %></a>
+      </p>
+    <% end %>
+    </div>
+  </div>
+
+  <div id="method-index">
+    <div class="title">
+      <span class="text">Methods </span><input type="text" value="" class="search-field" />
+    </div>
+    <div class="entries">
+    <% @all_methods.each do |m| %>
+      <% ptag = m.documented? ? '<p>' : '<p class="nodoc">' %>
+      <%= ptag %><span class="type"><%= m.name_prefix %></span><a href="<%= m.path %>"><%= h(m.name) %> (<%= m.parent.full_name %>)</a></p>
+    <% end %>
+    </div>
+  </div>
+
+</body>
+</html>
