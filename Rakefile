@@ -20,14 +20,10 @@ Hoe.spec 'rdoc-babel' do
   self.extra_dev_deps << ['minitest', '>= 1.7']
   self.extra_dev_deps << ['nokogiri', '~> 1.4']
 
-  spec_extras[:homepage] = 'http://github.com/thyresias/babel'
+  spec_extras[:homepage] = 'http://github.com/thyresias/rdoc-babel'
   spec_extras[:rdoc_options] = [
     '--main', 'README.rdoc',
   ]
-
-  #spec_extras[:post_install_message] = <<-EOS
-  #  the crash for creating Babel documentation is due to a RubyGem bug
-  #EOS
 
 end
 
