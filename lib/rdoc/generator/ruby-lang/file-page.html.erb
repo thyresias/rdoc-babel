@@ -32,11 +32,7 @@
     <h3>Requires</h3>
     <ul>
     <% @file.requires.each do |r| %>
-      <% if (tl = r.top_level) %>
-        <li><a href="<%= @rel_prefix %>/<%= h tl.path %>"><%= r.name %></a></li>
-      <% else %>
-        <li><%= r.name %></li>
-      <% end %>
+      <li><%= r.name %></li>
     <% end %>
     </ul>
   <% end %>

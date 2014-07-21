@@ -6,3 +6,7 @@ Initial version, developed along with {RDoc}[http://github.com/rdoc/rdoc] 3.0.
 === 0.9.1 / 2011-07-16
 
 First public release.
+
+=== 1.0.0 / 2014-07-20
+
+Make it compatible with RDoc 4.1 and its bugs.

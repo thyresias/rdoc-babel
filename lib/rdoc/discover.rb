@@ -1,1 +1,1 @@
-require 'rdoc/generator/babel'
+require_relative 'generator/babel'

@@ -1,11 +1,32 @@
-require 'rdoc'
-require 'rdoc/rdoc'
+# require 'rdoc'
+# require 'rdoc/rdoc'
 #require 'rdoc/generator'
 require 'pathname'
 require 'fileutils'
 require 'erb'
 
-require 'rdoc/generator/markup'
+# require 'rdoc/generator/markup'
+
+# remove junk <span> at the end
+class RDoc::Markup::ToHtml
+
+  undef accept_heading
+
+  def accept_heading heading
+    level = [6, heading.level].min
+
+    label = heading.label @code_object
+
+    @res << if @options.output_decoration
+              "\n<h#{level} id=\"#{label}\">"
+            else
+              "\n<h#{level}>"
+            end
+    @res << to_html(heading.text)
+    @res << "</h#{level}>\n"
+  end
+
+end
 
 ##
 # Babel RDoc HTML Generator.
@@ -105,7 +126,8 @@ class RDoc::Generator::Babel
 
   # Saves the options, makes sure the template is found.
 
-  def initialize(options)
+  def initialize(store, options)
+    @store = store
     @options = options
     @babel_options = options.babel_options
     @see_standard_ancestors = @babel_options[:see_standard_ancestors]
@@ -132,19 +154,19 @@ class RDoc::Generator::Babel
 
   # Generates the documentation.
 
-  def generate(top_levels)
+  def generate
 
     # set instance variables
 
     @output_dir = Pathname.new(@options.op_dir).expand_path(@source_dir)
-    @all_classes_and_modules = RDoc::TopLevel.all_classes_and_modules.sort
-    @unique_classes_and_modules = RDoc::TopLevel.unique_classes_and_modules.sort
+    @all_classes_and_modules = @store.all_classes_and_modules.sort
+    @unique_classes_and_modules = @store.unique_classes_and_modules.sort
 
     @all_methods = @unique_classes_and_modules.
       inject([]) { |a,m| a.concat m.method_list }.
       sort { |a,b| [a, a.parent_name] <=> [b, b.parent_name] }
 
-    @all_files = top_levels # not sorted: keep command line order
+    @all_files = @store.all_files # not sorted: keep command line order
     @files_with_comment = @all_files.reject { |f| f.comment.empty? }
     @simple_files = @files_with_comment.select { |f| f.parser == RDoc::Parser::Simple }
 
@@ -374,6 +396,7 @@ protected
   # describing method +from+.
 
   def link(from, to)
+    to.parent = from.parent unless to.parent # HACK: to.parent may be nil
     href = from.parent.aref_to(to.path)
     to_parent = to.parent.full_name.dup
     if @options.show_hash

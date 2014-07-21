@@ -1,10 +1,10 @@
-require 'rubygems'
+require 'rdoc'
 require 'rdoc/generator/babel'
 require 'minitest/autorun'
 require 'tmpdir'
 require 'nokogiri'
 
-class TestRDocGeneratorBabel < MiniTest::Unit::TestCase
+class TestRDocGeneratorBabel < Minitest::Test
 
   def setup
 
@@ -97,7 +97,7 @@ class TestRDocGeneratorBabel < MiniTest::Unit::TestCase
 
     refs = classes.css('a')
     assert_equal 3, refs.length
-    assert_equal "Mod2::Mod3 \342\206\222 Mod1", refs.last.content
+    assert_equal "Mod2::Mod3 \u2192 Mod1", refs.last.content
     assert_equal 'classes/Mod1.html', refs.last['href']
 
     methods = doc.at_css('#method-index')
@@ -230,10 +230,11 @@ private
 
   def babel_gen
     @babel_gen ||= begin
+      store = RDoc::Store.new
       options = Struct.new(:babel_options, :line_numbers, :template).new
       options.template = 'babel'
       options.babel_options = {}
-      RDoc::Generator::Babel.new(options)
+      RDoc::Generator::Babel.new(store, options)
     end
   end
 
