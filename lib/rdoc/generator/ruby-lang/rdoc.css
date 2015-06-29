@@ -32,7 +32,7 @@ dt {
   margin-top: 1ex;
   font-weight: bold;
 }
-dt tt { font-size: 100%; }
+dt code { font-size: 100%; }
 dd { margin-left: 2em; }
 
 table {
@@ -196,7 +196,7 @@ h4, h5, h6 {
   border: none;
 }
 
-tt {
+code {
   font-family: Monaco, Consolas, "Lucida Console", monospace;
   font-size: 100%;
 }

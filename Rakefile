@@ -16,9 +16,9 @@ Hoe.spec 'rdoc-babel' do
   self.testlib = :minitest
   # self.test_prelude = %(gem "minitest")
 
-  self.extra_deps << ['rdoc', '~> 4.1']
+  self.extra_deps << ['rdoc', '~> 4.2']
 
-  self.extra_dev_deps << ['minitest', '~> 5.4']
+  self.extra_dev_deps << ['minitest', '~> 5.6']
   self.extra_dev_deps << ['nokogiri', '~> 1.6']
 
   spec_extras[:homepage] = 'http://github.com/thyresias/rdoc-babel'

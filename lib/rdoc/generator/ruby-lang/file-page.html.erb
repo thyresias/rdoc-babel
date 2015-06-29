@@ -18,7 +18,7 @@
   </p>
 </div>
 <div id="documentation">
-<% if @file.parser == RDoc::Parser::Simple %>
+<% if @file.parser == RDoc::Parser::Simple || @file.parser == RDoc::Parser::Markdown %>
   <%= @file.description %>
 <% else %>
   <% unless @file.comment.empty? %>

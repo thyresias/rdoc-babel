@@ -81,7 +81,7 @@ Babel supports specific options in addition to the standard RDoc options:
 
 (The MIT License)
 
-Copyright (c) 2010 Thierry Lambert
+Copyright (c) 2010-2014 Thierry Lambert
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
