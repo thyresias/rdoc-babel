@@ -16,3 +16,6 @@ Make it compatible with RDoc 4.1 and its bugs.
 * Fix rendering of Markdown files
 * Fix CSS file (code instead of tt)
 
+=== 1.0.2 / 2017-02-25
+
+* Fix for compatibility with RDoc 5 dupping the options.

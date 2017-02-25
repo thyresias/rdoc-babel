@@ -73,7 +73,8 @@ class RDoc::Generator::Babel
         :see_standard_ancestors => false,
       }
 
-      rdoc_options.extend Options
+      rdoc_options.extend Options  # extend the existing object
+      rdoc_options.class.include Options  # make sure #babel_options will be there on #dup'ed objects
       rdoc_options.babel_options = options
 
       opt = rdoc_options.option_parser
