@@ -132,7 +132,7 @@ class RDoc::Generator::Babel
     @options = options
     @babel_options = options.babel_options
     @see_standard_ancestors = @babel_options[:see_standard_ancestors]
-    RDoc::AnyMethod.add_line_numbers = options.line_numbers
+    RDoc::AnyMethod.add_line_numbers = options.line_numbers if RDoc::AnyMethod.respond_to? :add_line_numbers
     @options.template = 'ruby-lang' if @options.template == 'babel' # TODO leave template nil
     @template_dir = TEMPLATE_ROOT + @options.template
     @template_dir.directory? or raise RDoc::Error, "template not found: '#@template_dir'"
@@ -370,7 +370,7 @@ protected
     @stylesheet_url = @babel_options[:stylesheet_url] || (@rel_prefix + 'rdoc.css').to_s
 
     template_src = template_file.read
-    template = ERB.new(template_src, nil, '><')
+    template = ERB.new(template_src, nil, '<>')
     template.filename = template_file.to_s
 
     output = nil

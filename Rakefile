@@ -16,7 +16,7 @@ Hoe.spec 'rdoc-babel' do
   self.testlib = :minitest
   # self.test_prelude = %(gem "minitest")
 
-  self.extra_deps << ['rdoc', '~> 5.1']
+  self.extra_deps << ['rdoc', '~> 6.1']
 
   self.extra_dev_deps << ['minitest', '~> 5.10']
   self.extra_dev_deps << ['nokogiri', '~> 1.7']
