@@ -370,7 +370,7 @@ protected
     @stylesheet_url = @babel_options[:stylesheet_url] || (@rel_prefix + 'rdoc.css').to_s
 
     template_src = template_file.read
-    template = ERB.new(template_src, nil, '<>')
+    template = ERB.new(template_src, trim_mode: '<>')
     template.filename = template_file.to_s
 
     output = nil

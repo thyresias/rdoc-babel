@@ -18,8 +18,8 @@ Hoe.spec 'rdoc-babel' do
 
   self.extra_deps << ['rdoc', '~> 6.1']
 
-  self.extra_dev_deps << ['minitest', '~> 5.10']
-  self.extra_dev_deps << ['nokogiri', '~> 1.7']
+  self.extra_dev_deps << ['minitest', '~> 5.11']
+  self.extra_dev_deps << ['nokogiri', '~> 1.10']
 
   spec_extras[:homepage] = 'http://github.com/thyresias/rdoc-babel'
   spec_extras[:rdoc_options] = %w(--main README.rdoc)
