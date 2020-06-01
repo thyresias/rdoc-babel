@@ -24,16 +24,30 @@ td {
 }
 
 ul { margin-left: 1.5em; }
-ol { margin-left: 2em; }
 li { margin-top: 0.5ex; }
+
+ol { margin-left: 2em; }
 ol li { margin-top: 1em; }
 
-dt {
+/* label lists: classic DT/DD */
+
+.label-list dt {
   margin-top: 1ex;
   font-weight: bold;
 }
-dt code { font-size: 100%; }
-dd { margin-left: 2em; }
+.label-list dt code { font-size: 100%; }
+.label-list dd { margin-left: 2em; }
+
+/* note lists: DT and DD on same row, no space between rows */
+
+dl.note-list {
+  display: grid;
+  grid-template-columns: max-content auto;
+  margin-left: 1ex;
+}
+dl.note-list dt { grid-column-start: 1; }
+dl.note-list dd { grid-column-start: 2; }
+dl.note-list dd p { margin-top: 0; margin-left: 1ex; }
 
 table {
   border-collapse: collapse;
@@ -194,6 +208,10 @@ h3 {
 h4, h5, h6 {
   margin-top: 0.75em;
   border: none;
+}
+
+h4 {
+  font-weight: bold;
 }
 
 code {

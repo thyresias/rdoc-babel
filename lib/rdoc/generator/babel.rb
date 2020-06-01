@@ -212,7 +212,7 @@ class RDoc::Generator::Babel
       if source_path.directory?
         out_path.mkpath unless @options.dry_run
       else
-        FileUtils.cp source_path.to_s, out_path.dirname.to_s, options
+        FileUtils.cp source_path.to_s, out_path.dirname.to_s, **options
       end
     end
   end
