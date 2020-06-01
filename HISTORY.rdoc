@@ -1,21 +1,35 @@
 
-=== 0.9.0 / 2010-10-02
+=== 1.0.5 / 2020-06-01
 
-Initial version, developed along with {RDoc}[http://github.com/rdoc/rdoc] 3.0.
+* Fix warning with Ruby 2.7
+* Tune CSS for definition lists
 
-=== 0.9.1 / 2011-07-16
+=== 1.0.4 / 2019-08-02
 
-First public release.
+Fix for latest ERB syntax.
 
-=== 1.0.0 / 2014-07-20
+=== 1.0.3 / 2019-07-29
 
-Make it compatible with RDoc 4.1 and its bugs.
+Compatibility with RDoc 6.
+
+=== 1.0.2 / 2017-02-25
+
+Fix for compatibility with RDoc 5 dupping the options.
 
 === 1.0.1 / 2015-06-29
 
 * Fix rendering of Markdown files
 * Fix CSS file (code instead of tt)
 
-=== 1.0.2 / 2017-02-25
+=== 1.0.0 / 2014-07-20
 
-* Fix for compatibility with RDoc 5 dupping the options.
+Make it compatible with RDoc 4.1 and its bugs.
+
+=== 0.9.1 / 2011-07-16
+
+First public release.
+
+=== 0.9.0 / 2010-10-02
+
+Initial version, developed along with {RDoc}[http://github.com/rdoc/rdoc] 3.0.
+

@@ -1,5 +1,4 @@
 require 'rdoc'
-require 'rdoc/generator/babel'
 require 'minitest/autorun'
 require 'tmpdir'
 require 'nokogiri'
