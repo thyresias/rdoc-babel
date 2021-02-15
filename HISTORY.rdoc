@@ -1,4 +1,8 @@
 
+=== 1.0.6 / 2021-02-15
+
+* Re-fix warning with Ruby 2.7
+
 === 1.0.5 / 2020-06-01
 
 * Fix warning with Ruby 2.7

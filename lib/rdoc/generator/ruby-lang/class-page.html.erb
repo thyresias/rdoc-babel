@@ -93,9 +93,9 @@
       <% end %>
     </ul>
   <% end %>
-  <% unless @class.instance_method_list.empty? %>
+  <% unless @class.instance_methods.empty? %>
     <ul>
-      <% @class.instance_method_list.sort.each do |m| %>
+      <% @class.instance_methods.sort.each do |m| %>
       <% litag = m.documented? ? '<li>' : '<li class="nodoc">' %>
       <%= litag %><a href="#<%= m.aref %>"><span class="type"><%= @options.show_hash ? '#' : '' %></span><%= h m.name %></a></li>
       <% end %>
