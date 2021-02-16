@@ -1,7 +1,7 @@
 
-=== 1.0.6 / 2021-02-15
+=== 1.0.6 / 2021-02-16
 
-* Re-fix warning with Ruby 2.7
+* Fix warning with rdoc 6.3, update runtime dependency
 
 === 1.0.5 / 2020-06-01
 

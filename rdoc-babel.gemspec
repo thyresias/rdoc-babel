@@ -20,7 +20,7 @@ end
 
 def h.runtime_deps
   %w(
-    rdoc ~> 6.2
+    rdoc ~> 6.3
   )
 end
 
