@@ -1,4 +1,13 @@
 
+=== 1.1.1
+
+* fixes for RDoc bugs
+* tune CSS, switch to HTML 5
+
+=== 1.0.8
+
+* tune the style sheet
+
 === 1.0.7 / 2021-02-16
 
 * Fix warning with rdoc 6.3, update runtime dependency

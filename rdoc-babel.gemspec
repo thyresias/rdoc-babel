@@ -14,7 +14,7 @@ def h.test_files
 end
 
 def h.version
-  line = File.read('lib/rdoc_babel.rb').lines.grep(/VERSION/).first
+  line = File.read('lib/rdoc/generator/babel.rb').lines.grep(/VERSION/).first
   line[/VERSION\s*=\s*(['"])(.+)\1/, 2]
 end
 

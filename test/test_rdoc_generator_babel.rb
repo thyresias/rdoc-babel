@@ -167,14 +167,14 @@ class TestRDocGeneratorBabel < Minitest::Test
     check_call_seq '<<', <<-CALL, <<-HTML.strip
       ios << obj     -> ios
     CALL
-      ios <span class=\"c\">&lt;&lt;</span> obj     &rarr; ios
+      ios <span class="c">&lt;&lt;</span> obj     &rarr; ios
     HTML
 
     check_call_seq 'pos', <<-CALL, <<-HTML.strip.gsub("\n", '')
       ios.pos     -> integer
       ios.tell    -> integer
     CALL
-      ios.<span class=\"c\">pos</span>     &rarr; integer<br/>
+      ios.<span class="c">pos</span>     &rarr; integer<br/>
       ios.tell    &rarr; integer
     HTML
 
@@ -182,8 +182,8 @@ class TestRDocGeneratorBabel < Minitest::Test
       ios.readpartial(maxlen) -> string
       ios.readpartial(maxlen, outbuf) -> outbuf
     CALL
-      ios.<span class=\"c\">readpartial</span>(maxlen) &rarr; string<br/>
-      ios.<span class=\"c\">readpartial</span>(maxlen, outbuf) &rarr; outbuf
+      ios.<span class="c">readpartial</span>(maxlen) &rarr; string<br/>
+      ios.<span class="c">readpartial</span>(maxlen, outbuf) &rarr; outbuf
     HTML
 
     check_call_seq '[]', <<-CALL, <<-HTML.strip.gsub("\n", '')
@@ -194,9 +194,9 @@ class TestRDocGeneratorBabel < Minitest::Test
       array.slice(start, length)  - an_array or nil
       array.slice(range)          - an_array or nil
     CALL
-      array<span class=\"c\">[</span>index<span class=\"c\">]</span>                - obj      or nil<br/>
-      array<span class=\"c\">[</span>start, length<span class=\"c\">]</span>        - an_array or nil<br/>
-      array<span class=\"c\">[</span>range<span class=\"c\">]</span>                - an_array or nil<br/>
+      array<span class="c">[</span>index<span class="c">]</span>                - obj      or nil<br/>
+      array<span class="c">[</span>start, length<span class="c">]</span>        - an_array or nil<br/>
+      array<span class="c">[</span>range<span class="c">]</span>                - an_array or nil<br/>
       array.slice(index)          - obj      or nil<br/>
       array.slice(start, length)  - an_array or nil<br/>
       array.slice(range)          - an_array or nil

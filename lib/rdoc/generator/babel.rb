@@ -1,12 +1,8 @@
-# require 'rdoc'
-# require 'rdoc/rdoc'
-#require 'rdoc/generator'
 require 'pathname'
 require 'fileutils'
 require 'erb'
 
-# require 'rdoc/generator/markup'
-
+# :stopdoc:
 # remove junk <span> at the end
 class RDoc::Markup::ToHtml
 
@@ -27,6 +23,7 @@ class RDoc::Markup::ToHtml
   end
 
 end
+# :startdoc:
 
 ##
 # Babel RDoc HTML Generator.
@@ -35,6 +32,9 @@ end
 class RDoc::Generator::Babel
 
   RDoc::RDoc.add_generator(self)
+
+  VERSION = '1.1.1'
+  DESCRIPTION = 'Alternate HTML documentation'
 
   include ERB::Util
 
@@ -73,8 +73,8 @@ class RDoc::Generator::Babel
         :see_standard_ancestors => false,
       }
 
-      rdoc_options.extend Options  # extend the existing object
-      rdoc_options.class.include Options  # make sure #babel_options will be there on #dup'ed objects
+      rdoc_options.extend Options         # 1. extend the existing object
+      rdoc_options.class.include Options  # 2. make sure #babel_options will be there on #dup'ed objects
       rdoc_options.babel_options = options
 
       opt = rdoc_options.option_parser
@@ -169,7 +169,7 @@ class RDoc::Generator::Babel
 
     @all_files = @store.all_files # not sorted: keep command line order
     @files_with_comment = @all_files.reject { |f| f.comment.empty? }
-    @simple_files = @files_with_comment.select { |f| f.parser == RDoc::Parser::Simple }
+    @simple_files = @files_with_comment.select { |f| f.parser == RDoc::Parser::Simple || f.parser == RDoc::Parser::Markdown }
 
     @files_to_display =
       if @unique_classes_and_modules.empty?
@@ -324,37 +324,101 @@ class RDoc::Generator::Babel
 
   def decorated_call_seq(method, method_name_class)
 
+    # empty call_seq (RDoc bug)
+    if method.call_seq.strip.empty?
+      warn "call-seq empty: #{method.parent.full_name}#{method.name_prefix}#{method.name}"
+      return ''
+    end
+
     # I assume it is safe to use \001 \002 \003 \004 to escape & < > "
     text = method.call_seq.strip.gsub(/->/, "\001rarr;")
     ospan = "\002span class=\004#{method_name_class}\004\003"
     cspan = "\002/span\003"
 
-    if method.name =~ /^[a-z]/i
+    # the "or warn" below fire when the alias is not in the call-seq:
+    # ARGF#inspect: nope 1
+    # Array#size: nope 1
+    # BasicObject#singleton_method_removed: nope 1
+    # BasicObject#singleton_method_undefined: nope 1
+    # Complex#real?: nope 1
+    # Enumerator::ArithmeticSequence#===: nope 3.2
+    # Enumerator::ArithmeticSequence#eql?: nope 1
+    # Enumerator::Lazy#_enumerable_drop: nope 1
+    # Enumerator::Lazy#_enumerable_drop_while: nope 1
+    # Enumerator::Lazy#_enumerable_filter_map: nope 1
+    # Enumerator::Lazy#_enumerable_flat_map: nope 1
+    # Enumerator::Lazy#_enumerable_grep: nope 1
+    # Enumerator::Lazy#_enumerable_grep_v: nope 1
+    # Enumerator::Lazy#_enumerable_map: nope 1
+    # Enumerator::Lazy#_enumerable_reject: nope 1
+    # Enumerator::Lazy#_enumerable_select: nope 1
+    # Enumerator::Lazy#_enumerable_take: nope 1
+    # Enumerator::Lazy#_enumerable_take_while: nope 1
+    # Enumerator::Lazy#_enumerable_uniq: nope 1
+    # Enumerator::Lazy#_enumerable_zip: nope 1
+    # Enumerator::Lazy#_enumerable_with_index: nope 1
+    # FalseClass#inspect: nope 1
+    # Fiber#inspect: nope 1
+    # File::empty?: nope 1
+    # File::Stat#size?: nope 1
+    # FileTest#empty?: nope 1
+    # Float#===: nope 3.2
+    # Float#inspect: nope 1
+    # Hash#initialize_copy: nope 1
+    # Integer#===: nope 3.2
+    # Integer#inspect: nope 1
+    # Method#===: nope 3.2
+    # Module#extended: nope 1
+    # Module#inspect: nope 1
+    # Module#method_added: nope 1
+    # Module#method_removed: nope 1
+    # Module#method_undefined: nope 1
+    # Module#prepended: nope 1
+    # Numeric#%: nope 3.2
+    # Proc#===: nope 3.2
+    # Proc#inspect: nope 1
+    # Process::Sys::getegid: nope 1
+    # String#initialize_copy: nope 1
+    # Struct#deconstruct: nope 1
+    # Symbol#===: nope 3.2
+    # Symbol#next: nope 1
+    # Thread#inspect: nope 1
+    # TrueClass#inspect: nope 1
+
+    if method.name =~ /^\w/
       # look for things like 'IO.open' or 'open' at the beginning of lines
       name = Regexp.escape(method.name.sub(/=$/, ''))
-      re = Regexp.new('^(\s*)([:\w]+\.)?(' << name << ')', Regexp::MULTILINE)
-      text.gsub!(re, "\\1\\2#{ospan}\\3#{cspan}")
+      re = /^(\s*)([:\w]+\.)?(#{name})/
+      text.gsub!(re, "\\1\\2#{ospan}\\3#{cspan}") #or warn "#{method.parent.full_name}#{method.name_prefix}#{method.name}: nope 1"
     elsif method.name =~ /\[\]=?/
       # [] and []=
-      text.gsub!(/\[/m, "#{ospan}[#{cspan}")
-      text.gsub!(/\]/m, "#{ospan}]#{cspan}")
+      re = /[\[\]]/
+      sub_hash = { '[' => "#{ospan}[#{cspan}", ']' => "#{ospan}]#{cspan}" }
+      text.gsub!(re, sub_hash) #or warn "#{method.parent.full_name}#{method.name_prefix}#{method.name}: nope 2"
     else
       # operators:
+      # +(unary) -(unary)  ~  !
       # **
-      # -(unary) +(unary) ~
       # *  /  %
       # +  -
       # <<  >>
       # &
       # |  ^
       # >  >=  <  <=
-      # <=> == === =~
-      name = Regexp.escape(method.name)
-      re = Regexp.new(name, Regexp::MULTILINE)
-      text.gsub!(re, "#{ospan}\\&#{cspan}")
+      # <=>  ==  ===  =~
+      # !=  `  !~
+      case method.name
+      # -(unary) +(unary)
+      when '+@', '-@'
+        re = /^(\s*)(#{Regexp.escape(method.name[0])})/
+        text.gsub!(re, "\\1#{ospan}\\2#{cspan}") #or warn "#{method.parent.full_name}#{method.name_prefix}#{method.name}: nope 3.1"
+      else
+        re = /^(.*?)(#{Regexp.escape(method.name)})/
+        text.gsub!(re, "\\1#{ospan}\\2#{cspan}") #or warn "#{method.parent.full_name}#{method.name_prefix}#{method.name}: nope 3.2"
+      end
     end
 
-    h(text).gsub("\001", '&').gsub("\002",'<').gsub("\003",'>').gsub("\004",'"').gsub("\n", '<br/>')
+    h(text).tr("\001\002\003\004", '&<>"').gsub("\n", '<br/>')
   end
 
 protected

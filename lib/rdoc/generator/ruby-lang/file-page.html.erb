@@ -1,18 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=<%= @options.charset %>" />
+  <meta charset="<%= @options.charset %>">
   <title>File <%= @file.base_name %></title>
-  <link href="<%= @stylesheet_url %>" media="all" rel="stylesheet" type="text/css" />
-  <script src="<%= @rel_prefix %>/scripts/jquery.js" type="text/javascript" charset="utf-8"></script>
-  <script src="<%= @rel_prefix %>/scripts/mainFrame.js" type="text/javascript" charset="utf-8"></script>
+  <link href="<%= @stylesheet_url %>" rel="stylesheet">
+  <script src="<%= @rel_prefix %>/scripts/jquery.js" type="text/javascript"></script>
+  <script src="<%= @rel_prefix %>/scripts/mainFrame.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="header">
   <p class="header-title"><span class="prefix">File</span><span class="name"> <%= @file.base_name %></span></p>
   <p id="file-info">
     <span class="displayed">
-      Path: <%= @file.absolute_name %><br/>
+      Path: <%= @file.absolute_name %><br>
       Modified: <%= @file.last_modified ? @file.last_modified.strftime('%Y-%m-%d %H:%M:%S') : 'unknown' %>
     </span>
   </p>

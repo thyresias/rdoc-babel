@@ -19,7 +19,7 @@ pre, p, h1, h2, h3, h4, h5, h6, ul, ol, dl {
 }
 
 td {
-  vertical-align: top;
+  vertical-align: baseline;
   padding-right: 1ex;
 }
 
@@ -46,8 +46,13 @@ dl.note-list {
   margin-left: 1ex;
 }
 dl.note-list dt { grid-column-start: 1; }
-dl.note-list dd { grid-column-start: 2; }
-dl.note-list dd p { margin-top: 0; margin-left: 1ex; }
+dl.note-list dd { grid-column-start: 2; margin-left: 2ex; }
+dl.note-list dd p { margin-top: 0; }
+dl.note-list dd pre {
+  margin-top: 2px;
+  padding-top: 0.5ex;
+  padding-bottom: 0.5ex;
+}
 
 table {
   border-collapse: collapse;
@@ -56,10 +61,6 @@ table {
 
 td p {
   margin-top: 0.5ex;
-}
-
-table.rdoc-list .rdoc-term {
-  font-weight: bold;
 }
 
 hr {
@@ -76,7 +77,6 @@ a {
 }
 
 a:hover {
-  color: #00C;
   background-color: #ffa; /* pale yellow */
   padding-bottom: 2px;
 }
@@ -113,10 +113,9 @@ body.index {
 .index .title {
   padding: 3px 2px 5px 5px; /* TRBL */
   font-family: Georgia, Palatino, "Times New Roman", Times, serif;
-  font-size: 100%;
 }
 .search-field {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   position: absolute;
   right: 3px;
   padding: 0 1px 2px 2px; /* TRBL */
@@ -169,40 +168,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3 {
-  border-bottom: 1px dotted #ddd;
-}
-
-h1 a, h2 a, h3 a {
-  color: red; /* not the best, but no other idea */
-}
-
-h1 a:hover, h2 a:hover, h3 a:hover {
-  color: red;
-}
-
-h1 {
   margin-top: 1em;
   margin-bottom: 1ex;
-  font-size: 200%;
-}
-
-h2 {
-  margin-top: 1em;
-  margin-bottom: 1ex;
-  font-size: 150%;
-}
-
-h3 {
-  margin-top: 1em;
-  margin-bottom: 1ex;
-  font-size: 120%;
-  font-weight: bold;
-}
-
-#documentation > h1:first-child,
-#documentation > h2:first-child,
-#documentation > h3:first-child {
-  margin-top: 0;
+  border-bottom: 1px solid #ddd;
 }
 
 h4, h5, h6 {
@@ -210,19 +178,32 @@ h4, h5, h6 {
   border: none;
 }
 
-h4 {
-  font-weight: bold;
+h1 a, h2 a, h3 a {
+  color: #e62020; /* not the best, but no other idea */
+}
+
+h1 { font-size: 230%; }
+h2 { font-size: 180%; }
+h3 { font-size: 150%; }
+h4 { font-size: 120%; }
+h5 { font-size: 105%; }
+h6 { font-size: 100%; }
+
+#documentation > h1:first-child,
+#documentation > h2:first-child,
+#documentation > h3:first-child {
+  margin-top: 0;
 }
 
 code {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   font-size: 100%;
 }
 
 pre {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   padding: 1ex;
-  background-color: #f5f5f5;  /* very pale grey */
+  background-color: #f8f8f8;  /* very pale grey */
 }
 
 #documentation {
@@ -288,7 +269,7 @@ pre {
 #header a:hover {
   color: yellow;
   background-color: inherit;
-  border-bottom: 1px dotted yellow;
+  border-bottom: 1px solid yellow;
 }
 
 .header-title {
@@ -301,7 +282,7 @@ pre {
 #header .parent { font-size: 130%; }
 
 #file-info {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   font-size: 90%;
   vertical-align: top;
 }
@@ -409,7 +390,7 @@ pre {
 }
 #method-list li {
   display: inline-block;
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   font-size: 100%;
   padding: 2px 0;
 }
@@ -447,10 +428,10 @@ table.classes-modules {
   padding: 0.75ex 0 0 1ex;
 }
 .const-name p, .attr-name p {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   font-size: 100%;
   font-weight: bold;
-  padding: 0 0.5ex 0 0.2ex;
+  padding: 0.3ex 0.5ex 0 0.2ex;  /* top padding to align baselines */
 }
 .const-desc p, .attr-desc p {
 }
@@ -461,7 +442,7 @@ table.classes-modules {
   visibility: visible;
 }
 .const-value {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   display: none;
 }
 
@@ -475,7 +456,7 @@ table.classes-modules {
 */
 
 .method-detail {
-  border: 1px dotted #ddd;
+  border: 1px solid #ddd;
   margin-top: 1em;
   padding-bottom: 1ex;
   /* cursor: pointer; */
@@ -493,10 +474,10 @@ table.classes-modules {
 
 .method-heading {
   position: relative;
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
   font-size: 105%;
   padding: 0.5ex 1ex;
-  border-bottom: 1px dotted #ddd;
+  border-bottom: 1px solid #ddd;
   background-color: #eee;
   cursor: pointer;
 }
@@ -577,7 +558,7 @@ pre.method-source-code {
 
 /* requires */
 #file-details li {
-  font-family: Monaco, Consolas, "Lucida Console", monospace;
+  font-family: Consolas, Monaco, "Lucida Console", monospace;
 }
 
 /* maybe JS stuff */
