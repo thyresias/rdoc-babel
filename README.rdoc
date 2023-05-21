@@ -12,7 +12,7 @@ and to contribute alternate templates or style sheets.
 
 === Features of the "ruby-lang" template
 
-- Look and feel inspired from ruby-lang.org[http://www.ruby-lang.org/].
+- Look and feel inspired from ruby-lang.org[https://www.ruby-lang.org/] (in 2010).
 - Dual-frame output, with indexes on the left.
 - Search boxes for classes and methods.
 - Links to undocumented classes/methods are grayed.

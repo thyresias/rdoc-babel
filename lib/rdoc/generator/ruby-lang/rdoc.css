@@ -8,7 +8,7 @@
 * { padding: 0; margin: 0; }
 
 body {
-  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-family: "Noto Sans", Verdana, Geneva, Arial, Helvetica, sans-serif;
   background-color: white;
   color: black;
   font-size: 10pt;
@@ -90,9 +90,7 @@ a:hover {
 #header, .index .title {
   color: white;
   background-color: #275382;
-  background: -moz-linear-gradient(left,  #164270,  #77a1d1); /* firefox 3.6+ */
-  background: -webkit-gradient(linear, left top, right top, from(#164270), to(#77a1d1)); /* webkit browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1, StartColorStr='#164270', EndColorStr='#77a1d1'); /* IE */
+  background: linear-gradient(to right,  #164270,  #77a1d1);
 }
 
 /*
@@ -111,21 +109,23 @@ body.index {
 }
 
 .index .title {
-  padding: 3px 2px 5px 5px; /* TRBL */
   font-family: Georgia, Palatino, "Times New Roman", Times, serif;
+  padding: 3px 2px 5px 5px; /* TRBL */
+}
+.index .title .text {
+  display: inline-block;
+  padding-top: 2px; /* TRBL */
 }
 .search-field {
   font-family: Consolas, Monaco, "Lucida Console", monospace;
   position: absolute;
   right: 3px;
   padding: 0 1px 2px 2px; /* TRBL */
-  background: #f5f5f5;
   border: 1px solid silver;
-  color: silver;
+  color: gray;
   width: 8em; /* search... */
 }
-.search-field.active {
-  background: #fffffa;  /* very pale yellow */
+.search-field:focus {
   color: black;
 }
 
@@ -147,6 +147,28 @@ body.index {
 }
 .index a, .index a:hover {
   padding: 0 0.5ex;
+}
+
+/* the resizers, and a 9-pixel wide area around them */
+#file-class-resizer, #class-method-resizer {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  top: 90px;
+  height: 0px;
+  /*
+  background-color: red;
+  */
+}
+#file-class-resizer::after, #class-method-resizer::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9px;
+  margin-top: -4px;
+  background-color: transparent;
+  cursor: ns-resize;
 }
 
 /*

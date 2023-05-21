@@ -33,7 +33,7 @@ class RDoc::Generator::Babel
 
   RDoc::RDoc.add_generator(self)
 
-  VERSION = '1.1.1'
+  VERSION = '1.2.0'
   DESCRIPTION = 'Alternate HTML documentation'
 
   include ERB::Util
