@@ -1,3 +1,7 @@
+=== 1.2.1
+
+* filter: only search in link text (skip class/method type)
+
 === 1.2.0
 
 * add resizing of indexes in left frame
