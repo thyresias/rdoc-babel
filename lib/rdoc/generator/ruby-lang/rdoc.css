@@ -1,4 +1,17 @@
 
+:root {
+  --default-font: "Noto Sans", Verdana, Geneva, Arial, Helvetica, sans-serif;
+  --heading-font: Georgia, Palatino, "Times New Roman", Times, serif;
+  --fixed-font: Consolas, Monaco, "Lucida Console", monospace;
+  --link-color: #00C;  /* less aggressive than pure blue */
+  --link-hover-background: #ffa;  /* pale yellow */
+  --link-to-non-documented-color: #555;  /* grey */
+  --index-background: #f5f5f5;  /* pale grey */
+  --pre-background: #f8f8f8;  /* very pale grey */
+  --current-index-link-color: firebrick;
+  --current-index-link-background: #fcfcfc;
+}
+
 /*
  * ===============
  *  General reset
@@ -8,7 +21,7 @@
 * { padding: 0; margin: 0; }
 
 body {
-  font-family: "Noto Sans", Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-family: var(--default-font);
   background-color: white;
   color: black;
   font-size: 10pt;
@@ -72,17 +85,17 @@ hr {
 }
 
 a {
-  color: #00C; /* less aggressive than pure blue */
+  color: var(--link-color);
   text-decoration: none;
 }
 
 a:hover {
-  background-color: #ffa; /* pale yellow */
+  background-color: var(--link-hover-background);
   padding-bottom: 2px;
 }
 
 .nodoc a {
-  color: #555;
+  color: var(--link-to-non-documented-color);
 }
 
 /* banner colors */
@@ -91,6 +104,55 @@ a:hover {
   color: white;
   background-color: #275382;
   background: linear-gradient(to right,  #164270,  #77a1d1);
+}
+
+/*
+ * ===============
+ *  General Layout
+ * ===============
+ */
+
+html {
+  height: 100%;
+  width: 100%
+}
+
+body {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+#left-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-shrink: 0;
+}
+
+#left-frame {
+  width: 100%;
+  border: none;
+  border-right: 2px solid silver;
+}
+
+#main-container {
+  position: relative;
+  height: 100%;
+  flex-grow: 5;
+  flex-shrink: 1;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+#resizer {
+  position: absolute;
+  right: -5px;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  cursor: ew-resize;
+  z-index: 9999;
 }
 
 /*
@@ -105,11 +167,14 @@ a:hover {
 }
 
 body.index {
-  background-color: #f5f5f5;  /* very pale grey */
+  background-color: var(--index-background);
+  display: unset;
+  height: unset;
+  overflow: auto;
 }
 
 .index .title {
-  font-family: Georgia, Palatino, "Times New Roman", Times, serif;
+  font-family: var(--heading-font);
   padding: 3px 2px 5px 5px; /* TRBL */
 }
 .index .title .text {
@@ -117,7 +182,7 @@ body.index {
   padding-top: 2px; /* TRBL */
 }
 .search-field {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   position: absolute;
   right: 3px;
   padding: 0 1px 2px 2px; /* TRBL */
@@ -147,6 +212,12 @@ body.index {
 }
 .index a, .index a:hover {
   padding: 0 0.5ex;
+}
+
+/* current file, class, method */
+.current-main {
+  color: var(--current-index-link-color);
+  background-color: var(--current-index-link-background);
 }
 
 /* the resizers, and a 9-pixel wide area around them */
@@ -183,7 +254,7 @@ body.index {
  */
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Georgia, Palatino, "Times New Roman", Times, serif;
+  font-family: var(--heading-font);
   color: #c61a1a; /* ruby red ;) */
   padding-bottom: 0.5ex;
   font-weight: normal;
@@ -218,14 +289,14 @@ h6 { font-size: 100%; }
 }
 
 code {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   font-size: 100%;
 }
 
 pre {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   padding: 1ex;
-  background-color: #f8f8f8;  /* very pale grey */
+  background-color: var(--pre-background);
 }
 
 #documentation {
@@ -295,7 +366,7 @@ pre {
 }
 
 .header-title {
-  font-family: Georgia, Palatino, "Times New Roman", Times, serif;
+  font-family: var(--heading-font);
   /* vertical-align: middle; */
 }
 
@@ -304,7 +375,7 @@ pre {
 #header .parent { font-size: 130%; }
 
 #file-info {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   font-size: 90%;
   vertical-align: top;
 }
@@ -325,7 +396,7 @@ pre {
 #all-files {
   border: 1px solid silver;
   margin-top: 0.5ex;
-  background-color: white;
+  background-color: var(--index-background);
   padding: 1px 0;
   max-height: 30em;
   overflow-x: hidden;
@@ -335,13 +406,13 @@ pre {
   right: 1ex;
 }
 #all-files a {
-  color: #00C;
+  color: var(--link-color);
   padding-top: 0;
   padding-bottom: 0;
 }
 #all-files a:hover {
-  color: #00C;
-  background-color: #ffa;
+  color: var(--link-color);
+  background-color: var(--link-hover-background);
 }
 
 /* --- class page
@@ -412,7 +483,7 @@ pre {
 }
 #method-list li {
   display: inline-block;
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   font-size: 100%;
   padding: 2px 0;
 }
@@ -450,7 +521,7 @@ table.classes-modules {
   padding: 0.75ex 0 0 1ex;
 }
 .const-name p, .attr-name p {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   font-size: 100%;
   font-weight: bold;
   padding: 0.3ex 0.5ex 0 0.2ex;  /* top padding to align baselines */
@@ -464,7 +535,7 @@ table.classes-modules {
   visibility: visible;
 }
 .const-value {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   display: none;
 }
 
@@ -496,7 +567,7 @@ table.classes-modules {
 
 .method-heading {
   position: relative;
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
   font-size: 105%;
   padding: 0.5ex 1ex;
   border-bottom: 1px solid #ddd;
@@ -580,7 +651,7 @@ pre.method-source-code {
 
 /* requires */
 #file-details li {
-  font-family: Consolas, Monaco, "Lucida Console", monospace;
+  font-family: var(--fixed-font);
 }
 
 /* maybe JS stuff */

@@ -16,39 +16,41 @@ and to contribute alternate templates or style sheets.
 - Dual-frame output, with indexes on the left.
 - Search boxes for classes and methods.
 - Links to undocumented classes/methods are grayed.
-- Highlights target methods, attributes and constants.
+- Highlights the current file/class/method in the left frame.
+- Highlights the target method, attribute or constant in the main frame.
 - Adds links to ancestor methods/attributes.
 - Borrows some ideas (and one icon) from Darkfish.
-- Tested on Firefox 3.5 & 5, Chrome 9 & 12, Safari 4 & 5.
+- Tested on Firefox 113 and Chrome 113.
+  - If using the file:// protocol, the "same origin policy" for local files must be turned off:
+  - Firefox: about:config -> security.fileuri.strict_origin_policy = false
+  - Chrome: launch it with <tt>chrome --allow-file-access-from-files</tt>
 
 == Synopsis
 
 To output documentation formatted by Babel, use the <tt>--format/-f</tt>
-RDoc switch. For instance, to generate the documentation for Ruby core:
+RDoc switch. For instance, to generate the documentation for Ruby core and stdlib:
 
-  $ gem install rdoc-babel
-  $ cd ~/.rvm/src/ruby-1.8.7-p302
-  $ rdoc -f babel -a -t "Ruby 1.8.7 Core" -o ~/docs/ruby_core_187 *.c
+  > gem install rdoc-babel
+  > cd /ruby/src
+  > rdoc -f babel -a -t "Ruby Core + Stdlib" -o /docs/ruby-core
 
 Using rake:
 
   require 'rdoc/task'
 
   RDoc::Task.new do |t|
-    Dir.chdir '~/.rvm/src/ruby-1.9.2-p0'
+    Dir.chdir '/ruby/src'
     rdoc.options <<
       '--format' << 'babel' <<
       '--all'
-    t.title = "Ruby 1.9.2 Core"
-    t.rdoc_dir = '~/docs/ruby_core_192'
-    t.rdoc_files.concat Dir['*.c']
+    t.title = "Ruby Core + Stdlib"
+    t.rdoc_dir = '/docs/ruby-core'
   end
 
 To make Babel the default format when generating RDoc documentation,
-define the RDOCOPT environment variable in the appropriate file
-(e.g., <tt>~/.bashrc</tt>):
+define the RDOCOPT environment variable:
 
-  export RDOCOPT="--format babel"
+  RDOCOPT="--format babel"
 
 == Specific options
 
@@ -70,8 +72,8 @@ Babel supports specific options in addition to the standard RDoc options:
 
 == Requirements
 
-- Ruby >= 2.3.0 (may work with >= 1.9.3, but untested)
-- RDoc >= 5.0 (may work with >= 4.0, but untested)
+- Ruby >= 3.1.0 (may work with >= 2.5.0, but untested)
+- RDoc >= 6.5.0 (may work with >= 5.0, but untested)
 
 == Installation
 
@@ -81,7 +83,7 @@ Babel supports specific options in addition to the standard RDoc options:
 
 (The MIT License)
 
-Copyright (c) 2010-2020 Thierry Lambert
+Copyright (c) 2010-2023 Thierry Lambert
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

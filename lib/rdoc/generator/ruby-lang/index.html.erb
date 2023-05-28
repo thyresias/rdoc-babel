@@ -1,11 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="<%= @options.charset %>">
-  <title><%= h @options.title %></title>
+  <meta http-equiv="refresh" content="0; url=<%= @first_page.path %>" />
 </head>
-<frameset cols="20%,*">
-  <frame name="indexFrame" src="indexes.html">
-  <frame name="mainFrame" src="<%= @first_page.path %>">
-</frameset>
 </html>
