@@ -1,3 +1,9 @@
+=== 1.4.0
+
+* add a TOC button on the top right
+* fix initial sizing in the left pane
+* fix too wide <pre> sections
+
 === 1.3.0
 
 * switch from frameset to iframe

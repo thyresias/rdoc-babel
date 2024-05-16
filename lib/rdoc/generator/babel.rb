@@ -33,7 +33,7 @@ class RDoc::Generator::Babel
 
   RDoc::RDoc.add_generator(self)
 
-  VERSION = '1.3.0'
+  VERSION = '1.4.0'
   DESCRIPTION = 'Alternate HTML documentation'
 
   include ERB::Util
@@ -157,6 +157,25 @@ class RDoc::Generator::Babel
 
   def generate
 
+    # rdoc bug fix: public class/module methods appear as external_aliases (unresolved aliases)
+
+    @store.all_classes_and_modules.each do |cm|
+      next if cm.external_aliases.empty?
+      class_level_names = cm.method_list.select { |m| m.type == 'class' }.map(&:name)
+      cm.external_aliases.dup.each do |a|
+        cm.external_aliases.delete a if class_level_names.include?(a.name)
+      end
+    end
+
+    # other bug fix: method aliases with singleton mismatch
+
+    @store.all_classes_and_modules.each do |cm|
+      cm.class_method_list.each do |m|
+        m.is_alias_for.singleton = true if m.is_alias_for
+        m.aliases.each { |a| a.singleton = true }
+      end
+    end
+
     # set instance variables
 
     @output_dir = Pathname.new(@options.op_dir).expand_path(@source_dir)
@@ -178,11 +197,25 @@ class RDoc::Generator::Babel
         @simple_files
       end
 
-    @main_file = @options.main_page && @all_files.find { |f| f.full_name == @options.main_page }
-    if @main_file
-      unless @files_to_display.find { |f| f.full_name == @options.main_page }
-        @files_to_display.unshift @main_file
+    if @options.main_page
+      # look for a TopLevel matching the main page
+      @main_page = @all_files.find { |f| f.full_name == @options.main_page }
+      if @main_page
+        # TODO are there cases where main_page = 'README' for 'lib/README'?
+        unless @files_to_display.find { |f| f.full_name == @options.main_page }
+          @files_to_display.unshift @main_page
+        end
+      # look for a class/module with that name
+      else
+        match = @unique_classes_and_modules.find { |cm| cm.full_name == @options.main_page }
+        if match
+          @main_page = match
+        else
+          warn "no such page: --main #{@options.main_page}"
+        end
       end
+    else
+      @main_page = nil
     end
 
     # write the output
@@ -263,7 +296,7 @@ class RDoc::Generator::Babel
   # Returns the first +Context+ object to display in the main frame.
   # This is, in order:
   # - The file designated by the +main_page+ option,
-  #   if there is a +TopLevel+ with that name.
+  #   if there is a +TopLevel+ or class/module with that name.
   # - The first simple file that contains a comment
   #   (in the order given on the command line).
   # - The first class or module that contains a comment.
@@ -274,19 +307,30 @@ class RDoc::Generator::Babel
   # - The first file.
 
   def first_page
-    # TODO are there cases where main_page = 'README' for 'lib/README'?
-    if @options.main_page && (main_file = @all_files.find { |f| f.full_name == @options.main_page })
-      main_file
+    if @main_page
+      debug_msg "main as --main: #{@main_page}"
+      @main_page
     elsif (file = @simple_files.first)
+      debug_msg "main as first simple file: #{file}"
       file
     elsif (cm = @unique_classes_and_modules.find { |k| !k.comment.empty? })
+      debug_msg "main as first module/class with comment: #{cm}"
       cm
-    elsif (file = @files_with_comment.first)
-      file
+    # this is not a simple file, so currently not displayed in files
+    # elsif (file = @files_with_comment.first)
+    #   debug_msg "main as first file with comment: #{file}"
+    #   file
     elsif !@unique_classes_and_modules.empty?
-      @unique_classes_and_modules.find { |k| k.any_content } or
-        @unique_classes_and_modules.first
+      cm = @unique_classes_and_modules.find { |k| k.any_content }
+      if cm
+        debug_msg "main as first module/class with any content: #{cm}"
+      else
+        debug_msg "main as first module/class (no content): #{cm}"
+        cm = @unique_classes_and_modules.first
+      end
+      cm
     else
+      debug_msg "main as first file: #{cm}"
       @all_files.first
     end
   end
@@ -450,9 +494,32 @@ protected
 
     return if @options.dry_run
 
+    # fix file cross-references
+    # rdoc:ref handling by RDoc requires that files and classes are stored in the
+    # root output directory, while we have files and classes in separate subdirectories
+    output.gsub!(/<a (.*?)\bhref="(.+?)"/) do |match|
+      atts = $1
+      href = $2
+      next match if href[0] == '#'
+      path, id = href.split('#')
+      # in classes/OptionParser.html:
+      # we find for instance <a href="optparse/tutorial_rdoc.html">Tutorial</a>
+      # which matches files/doc/optparse/tutorial_rdoc.html
+      matches = @all_files.select do |f|
+        f.path.end_with?(path) && f.path != path
+      end
+      next match if matches.empty?
+      # we replace optparse/tutorial_rdoc.html by ../files/doc/optparse/tutorial_rdoc.html
+      f = matches.first
+      actual = Pathname.new(f.path).expand_path(@output_dir).relative_path_from(outfile.dirname).to_s
+      next match if actual == path
+      actual << '#' << id if id
+      %(<a #{atts}href="#{actual}")
+    end
+
     outfile.dirname.mkpath
-    outfile.open('w', 0644) do |ofh|
-      ofh.print(output)
+    outfile.open('w', 0644) do |io|
+      io.print(output)
     end
 
   end

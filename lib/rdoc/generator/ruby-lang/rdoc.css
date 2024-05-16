@@ -8,6 +8,7 @@
   --link-to-non-documented-color: #555;  /* grey */
   --index-background: #f5f5f5;  /* pale grey */
   --pre-background: #f8f8f8;  /* very pale grey */
+  --code-background: #f4f4f4;  /* pale grey */
   --current-index-link-color: firebrick;
   --current-index-link-background: #fcfcfc;
 }
@@ -36,6 +37,11 @@ td {
   padding-right: 1ex;
 }
 
+blockquote {
+  border-left: 2px solid silver;
+  padding-left: 12px;
+}
+
 ul { margin-left: 1.5em; }
 li { margin-top: 0.5ex; }
 
@@ -44,12 +50,12 @@ ol li { margin-top: 1em; }
 
 /* label lists: classic DT/DD */
 
-.label-list dt {
+.label-list > dt {
   margin-top: 1ex;
   font-weight: bold;
 }
-.label-list dt code { font-size: 100%; }
-.label-list dd { margin-left: 2em; }
+.label-list > dt > code { font-size: 100%; }
+.label-list > dd { margin-left: 2em; }
 
 /* note lists: DT and DD on same row, no space between rows */
 
@@ -58,10 +64,10 @@ dl.note-list {
   grid-template-columns: max-content auto;
   margin-left: 1ex;
 }
-dl.note-list dt { grid-column-start: 1; }
-dl.note-list dd { grid-column-start: 2; margin-left: 2ex; }
-dl.note-list dd p { margin-top: 0; }
-dl.note-list dd pre {
+dl.note-list > dt { grid-column-start: 1; }
+dl.note-list > dd { grid-column-start: 2; margin-left: 2ex; }
+dl.note-list > dd > p { margin-top: 0; }
+dl.note-list > dd > pre {
   margin-top: 2px;
   padding-top: 0.5ex;
   padding-bottom: 0.5ex;
@@ -112,37 +118,24 @@ a:hover {
  * ===============
  */
 
-html {
-  height: 100%;
-  width: 100%
-}
-
 body {
-  display: flex;
-  height: 100%;
-  overflow: hidden;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
 #left-container {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  width: 20vw;
+  height: 100vh;
+  overflow: hidden;
+  border-right: 2px solid silver;
 }
 
 #left-frame {
   width: 100%;
+  height: 100vh;
   border: none;
-  border-right: 2px solid silver;
-}
-
-#main-container {
-  position: relative;
-  height: 100%;
-  flex-grow: 5;
-  flex-shrink: 1;
-  box-sizing: border-box;
-  overflow: auto;
 }
 
 #resizer {
@@ -249,6 +242,7 @@ body.index {
  *
  * The structure is:
  *  #header
+ *  nav  (inserted by script)
  *  #documentation
  *
  */
@@ -291,18 +285,101 @@ h6 { font-size: 100%; }
 code {
   font-family: var(--fixed-font);
   font-size: 100%;
+  background-color: var(--code-background);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+a:hover code {
+  background-color: var(--link-hover-background);
 }
 
 pre {
   font-family: var(--fixed-font);
   padding: 1ex;
   background-color: var(--pre-background);
+  border-radius: 8px;
+  white-space: break-spaces; /* for too wide text: see Net::HTTP#patch */
 }
 
 #documentation {
   padding: 1em; /* TRBL */
   overflow: auto;
 }
+
+/* --- toc button and menu */
+
+nav {
+  position: fixed;
+  padding-top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+nav p {
+  margin: 0;
+  padding: 0;
+}
+
+nav p.h2 { text-indent: 10px; }
+nav p.h3 { text-indent: 20px; }
+nav p.h4 { text-indent: 30px; }
+nav p.h5 { text-indent: 40px; }
+nav p.h6 { text-indent: 50px; }
+
+#menu-button {
+  float: right;
+  margin-top: 4px;
+  margin-right: 4px;
+
+  cursor: pointer;
+  background-color: #ededed;
+  opacity: 0.5;
+  box-shadow: none;
+  border: 1px solid silver;
+  border-radius: 3px;
+  padding: 3px;
+  padding-bottom: 0;  /* centers the 18px icon vertically */
+}
+
+#menu-button:hover {
+  opacity: 1;
+}
+
+#menu-content {
+  font-size: 9pt;
+  border: 1px solid silver;
+  background-color: white;
+  z-index: 1;
+}
+
+#menu-top {
+  margin: 0;
+  padding: 6pt;
+  border-bottom: 1px solid silver;
+}
+
+#toc-content {
+  margin: 0;
+  padding: 6pt;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.icon-hamburger {
+  content: url("images/menu_black_18dp.svg");
+  display: inline-block !important; }
+.icon-cross {
+  content: url("images/close_black_18dp.svg");
+  display: none !important;
+}
+
+.show-close .icon-hamburger { display: none !important; }
+.show-close .icon-cross { display: inline-block !important; }
 
 /* --- top header of main files
 
@@ -383,10 +460,12 @@ pre {
   position: absolute;
   right: 1ex;
 }
+/* conflict with menu
 .hidden {
   visibility: hidden;
   display: inline-block;
 }
+*/
 .in-files {
   vertical-align: top;
 }
@@ -550,6 +629,7 @@ table.classes-modules {
 
 .method-detail {
   border: 1px solid #ddd;
+  border-radius: 3px;
   margin-top: 1em;
   padding-bottom: 1ex;
   /* cursor: pointer; */
@@ -571,6 +651,8 @@ table.classes-modules {
   font-size: 105%;
   padding: 0.5ex 1ex;
   border-bottom: 1px solid #ddd;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
   background-color: #eee;
   cursor: pointer;
 }

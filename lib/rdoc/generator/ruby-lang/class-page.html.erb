@@ -74,8 +74,8 @@
 
 <%= @class.description %>
 
-<!-- class/module aliases -->
 <% unless @class.aliases.empty? %>
+<!-- class/module aliases -->
 <div id="class-aliases" class="list">
   <h3><%= @class.type.capitalize %> Aliases</h3>
   <ul>
@@ -86,8 +86,8 @@
 </div>
 <% end %>
 
-<!-- list of methods -->
 <% unless @class.method_list.empty? %>
+<!-- list of methods -->
 <div id="method-list" class="list">
   <h3>Methods</h3>
   <% unless @class.class_method_list.empty? %>
@@ -109,8 +109,8 @@
 </div>
 <% end %>
 
-<!-- namespace contents -->
 <% unless @class.non_aliases.empty? %>
+<!-- namespace contents -->
 <div id="namespace-list" class="list">
   <h3>Modules and Classes</h3>
   <table class="classes-modules">
@@ -124,8 +124,8 @@
 </div>
 <% end %>
 
-<!-- included modules -->
 <% unless @class.includes.empty? %>
+<!-- included modules -->
 <div id="include-list" class="list">
   <h3>Included Modules</h3>
   <ul>
@@ -140,8 +140,8 @@
 </div>
 <% end %>
 
-<!-- constants -->
 <% unless @class.constants.empty? %>
+<!-- constants -->
 <div id="constant-list" class="list">
   <h3>Constants</h3>
   <table>
@@ -167,8 +167,8 @@
 </div>
 <% end %>
 
-<!-- external aliases -->
 <% unless @class.external_aliases.empty? %>
+<!-- external aliases -->
 <div id="external-aliases" class="list">
   <h3>External Aliases</h3>
   <table>
@@ -182,8 +182,8 @@
 </div>
 <% end %>
 
-<!-- class/module attributes -->
 <% unless @class.class_attributes.empty? %>
+<!-- class/module attributes -->
 <div id="class-attributes" class="list">
   <h3><%= @class.type.capitalize %> Attributes</h3>
   <table>
@@ -208,8 +208,8 @@
 </div>
 <% end %>
 
-<!-- instance attributes -->
 <% unless @class.instance_attributes.empty? %>
+<!-- instance attributes -->
 <div id="instance-attributes" class="list">
   <h3>Instance Attributes</h3>
   <table>

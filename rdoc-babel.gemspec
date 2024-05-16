@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
 
   s.version = h.version
+  s.required_ruby_version = '>= 3.0'
 
   s.author = 'Thierry Lambert'
   s.email = 'thyresias@gmail.com'
