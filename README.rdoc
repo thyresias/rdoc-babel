@@ -20,10 +20,9 @@ and to contribute alternate templates or style sheets.
 - Highlights the target method, attribute or constant in the main frame.
 - Adds links to ancestor methods/attributes.
 - Borrows some ideas (and one icon) from Darkfish.
-- Tested on Firefox 113 and Chrome 113.
-  - If using the file:// protocol, the "same origin policy" for local files must be turned off:
-  - Firefox: about:config -> security.fileuri.strict_origin_policy = false
-  - Chrome: launch it with <tt>chrome --allow-file-access-from-files</tt>
+- Tested on Firefox 125.<br>
+  If using the <tt>file://</tt> protocol, the "same origin policy" for local files must be turned off:<br>
+  <tt>about:config</tt> > <tt>security.fileuri.strict_origin_policy = false</tt>
 
 == Synopsis
 
@@ -83,7 +82,7 @@ Babel supports specific options in addition to the standard RDoc options:
 
 (The MIT License)
 
-Copyright (c) 2010-2023 Thierry Lambert
+Copyright (c) 2010-2024 Thierry Lambert
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
