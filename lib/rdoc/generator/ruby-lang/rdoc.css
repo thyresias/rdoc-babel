@@ -390,45 +390,25 @@ nav p.h6 { text-indent: 50px; }
     p.header-title
       span.parent
     p#file-info
-      span.displayed
-        span.in-files
-          'In:'
-        span.first-files
-          a (link to 1st files)
-          a#show-all-files  # if more than 2 files
-      span.hidden
-        (same as .displayed, but no #show-all-files id on last a)
-      span#all-files
-        a (link to each file)
-
-  The reason for repeating the spans .displayed & .hidden is to have
-  .displayed to the right, on the same line as the class title if it fits,
-  on the next line otherwise:
-
-    class Object                                  In: object.c
-
-    class VeryLongNameInVeryLongFileName
-                   In: very_long_name_in_very_long_filename.rb
-
-    class VeryLongNameInVeryLongFileName < Object
-                   In: very_long_name_in_very_long_filename.rb
-
-    class VeryLongNameInVeryLongFileNameAndAlsoASuperclass
-      < Object     In: very_long_name_in_very_long_filename.rb
-
-  Because p#file-info has 'white-space: nowrap', .displayed & .hidden
-  are always on the same line.
-
+      span.in-files
+        'In:'
+      span.file-list
+        a (link to 1st files)
+        a#show-all-files  # if more than 2 files
+        span#all-files
+          a (link to each file)
 */
 
 #header {
   padding: 1ex;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
 }
 
 #header p {
   margin: 0;
   padding: 0;
-  display: inline-block;
   white-space: nowrap;
 }
 
@@ -451,25 +431,16 @@ nav p.h6 { text-indent: 50px; }
 #header .name   { font-size: 170%; }
 #header .parent { font-size: 130%; }
 
-#file-info {
+p#file-info {
   font-family: var(--fixed-font);
   font-size: 90%;
   vertical-align: top;
+  margin-left: auto;
 }
-.displayed {
-  position: absolute;
-  right: 1ex;
-}
-/* conflict with menu
-.hidden {
-  visibility: hidden;
-  display: inline-block;
-}
-*/
 .in-files {
   vertical-align: top;
 }
-.first-files {
+.file-list {
   display: inline-block;
 }
 #all-files {
@@ -482,7 +453,6 @@ nav p.h6 { text-indent: 50px; }
   overflow-y: auto;
   display: none;
   position: absolute;
-  right: 1ex;
 }
 #all-files a {
   color: var(--link-color);
@@ -746,7 +716,6 @@ pre.method-source-code {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
 }
-
 
 /* debugging section */
 

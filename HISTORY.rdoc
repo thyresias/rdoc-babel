@@ -1,3 +1,8 @@
+=== 1.4.1
+
+* remove an extra </span> in class HTML
+* use flex to display the header components
+
 === 1.4.0
 
 * add a TOC button on the top right

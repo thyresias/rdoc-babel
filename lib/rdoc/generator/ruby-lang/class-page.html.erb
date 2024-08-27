@@ -20,51 +20,33 @@
   </p>
   <% if @class.type == 'class' && @class.superclass %>
     <p class="header-title">
-    <% if String === @class.superclass %>
-      <span class="parent"> &lt; <%= @class.superclass %></span>
+    <% if @class.superclass.is_a?(String) %>
+      <span class="parent"> &nbsp;&lt; <%= @class.superclass %></span>
     <% else %>
-      </span><span class="parent"> &lt; <a href="<%= @class.aref_to @class.superclass.path %>"><%= @class.superclass.full_name %></a></span>
+      <span class="parent"> &nbsp;&lt; <a href="<%= @class.aref_to @class.superclass.path %>"><%= @class.superclass.full_name %></a></span>
     <% end %>
     </p>
   <% end %>
   <p id="file-info">
+    <span class="in-files">In:</span>
   <% if @class.in_files.length < 3 %>
-    <span class="displayed">
-      <span class="in-files">In:</span>
-      <span class="first-files">
-      <% @class.in_files.each do |f| %>
+    <span class="file-list">
+    <% @class.in_files.each do |f| %>
+      <a href="<%= @rel_prefix %>/<%= h f.path %>"><%= h f.full_name %></a><br>
+    <% end %>
+    <% if @class.in_files.length == 1 %>
+      &nbsp;
+    <% end %>
+    </span>
+  <% else %>
+    <span class="file-list">
+      <a href="<%= @rel_prefix %>/<%= h @class.in_files.first.path %>"><%= h @class.in_files.first.full_name %></a><br>
+      <a href="#" id="show-all-files">(<%= @class.in_files.length - 1 %> more...)</a>
+      <span id="all-files">
+      <% @class.in_files[1..-1].each do |f| %>
         <a href="<%= @rel_prefix %>/<%= h f.path %>"><%= h f.full_name %></a><br>
       <% end %>
       </span>
-    </span>
-    <span class="hidden">
-      <span class="in-files">In:</span>
-      <span class="first-files">
-      <% @class.in_files.each do |f| %>
-        <a href="#"><%= h f.full_name %></a><br>
-      <% end %>
-      </span>
-    </span>
-  <% else %>
-    <span class="displayed">
-      <span class="in-files">In:</span>
-      <span class="first-files">
-        <a href="<%= @rel_prefix %>/<%= h @class.in_files.first.path %>"><%= h @class.in_files.first.full_name %></a><br>
-        <a href="#" id="show-all-files">(<%= @class.in_files.length - 1 %> more...)</a>
-      </span>
-    </span>
-    <span class="hidden">
-      <span class="in-files">In:</span>
-      <span class="first-files">
-        <a href="#"><%= h @class.in_files.first.full_name %></a><br>
-        <a href="#" id="show-all-files">(<%= @class.in_files.length - 1 %> more...)</a>
-      </span>
-    </span>
-    <br>
-    <span id="all-files">
-    <% @class.in_files[1..-1].each do |f| %>
-      <a href="<%= @rel_prefix %>/<%= h f.path %>"><%= h f.full_name %></a><br>
-    <% end %>
     </span>
   <% end %>
   </p>
