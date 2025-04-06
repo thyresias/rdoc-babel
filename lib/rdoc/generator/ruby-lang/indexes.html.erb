@@ -28,7 +28,7 @@
     <div class="entries">
     <% @all_classes_and_modules.each do |k| %>
       <p class="<%= k.any_content ? k.type : k.type + ' nodoc' %>">
-        <span class="type"><%= k.type[0..0].upcase %></span><a href="<%= k.path %>"><%= k.full_name + (k.is_alias_for ? ' &rarr; ' << k.is_alias_for.full_name : '') %></a>
+        <span class="type"><%= k.type[0..0].upcase %></span><a href="<%= k.path %>"><%= k.full_name + (k.is_alias_for ? +' &rarr; ' << k.is_alias_for.full_name : '') %></a>
       </p>
     <% end %>
     </div>

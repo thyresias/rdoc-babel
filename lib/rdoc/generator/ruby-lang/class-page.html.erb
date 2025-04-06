@@ -79,13 +79,24 @@
       <% end %>
     </ul>
   <% end %>
-  <% unless @class.instance_methods.empty? %>
+  <% unless @class.instance_methods.empty?
+       section_hash = section_methods_hash(@class.instance_methods)
+       has_sections = section_hash.size > 1 || section_hash.keys.first.title
+       section_hash.each do |section, methods|
+        if has_sections %>
+    <div class="section-methods">
+    <p class="methods-section"><%= section.title || 'Other' %></p>
+       <% end %>
     <ul>
-      <% @class.instance_methods.sort.each do |m| %>
+      <% methods.sort.each do |m| %>
       <% litag = m.documented? ? '<li>' : '<li class="nodoc">' %>
       <%= litag %><a href="#<%= m.aref %>"><span class="type"><%= @options.show_hash ? '#' : '' %></span><%= h m.name %></a></li>
       <% end %>
     </ul>
+      <% if has_sections %>
+    </div>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 <% end %>
@@ -221,7 +232,13 @@
      next if methods.empty?
 %>
 <h2 id="<%= visibility %>-<%= type %>-methods"><%= visibility.to_s.capitalize %> <%= type.capitalize %> Methods</h2>
-<% methods.each do |method| %>
+<% section_hash = section_methods_hash(methods)
+   has_sections = section_hash.size > 1 || section_hash.keys.first.title
+   section_hash.each do |section, methods|
+   if has_sections %>
+   <h3><%= section.title || 'Other' %></h3>
+<% end
+   methods.each do |method| %>
   <div id="<%= method.aref %>" class="method-detail<%= method.is_alias_for ? ' method-alias' : '' %>">
     <div class="method-heading">
     <% if method.call_seq %>
@@ -249,6 +266,7 @@
 
   </div> <!-- #<%= method.aref %> -->
 <% end # methods.each %>
+<% end # section_hash.each %>
 <% end # visibilities.each %>
 <% end # @class.methods_by_type.each %>
 

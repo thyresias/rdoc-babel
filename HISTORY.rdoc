@@ -1,3 +1,7 @@
+=== 1.5.0
+
+* add support for RDoc section directive for instance methods.
+
 === 1.4.2
 
 * import web fonts in the CSS

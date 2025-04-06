@@ -3,21 +3,21 @@ require 'fileutils'
 require 'erb'
 
 # :stopdoc:
-# remove junk <span> at the end
 class RDoc::Markup::ToHtml
 
+  # remove junk <span> at the end
   undef accept_heading
-
   def accept_heading heading
     level = [6, heading.level].min
 
     label = heading.label @code_object
 
-    @res << if @options.output_decoration
-              "\n<h#{level} id=\"#{label}\">"
-            else
-              "\n<h#{level}>"
-            end
+    @res <<
+      if @options.output_decoration
+        "\n<h#{level} id=\"#{label}\">"
+      else
+        "\n<h#{level}>"
+      end
     @res << to_html(heading.text)
     @res << "</h#{level}>\n"
   end
@@ -33,7 +33,7 @@ class RDoc::Generator::Babel
 
   RDoc::RDoc.add_generator(self)
 
-  VERSION = '1.4.2'
+  VERSION = '1.5.0'
   DESCRIPTION = 'Alternate HTML documentation'
 
   include ERB::Util
@@ -276,6 +276,14 @@ class RDoc::Generator::Babel
       debug_msg "  %s %s" % [klass.type, klass.full_name]
       outfile = @output_dir + klass.path
       @class = klass
+      @sections = klass.sections
+      if @sections.size > 1
+        anonymous_section = @sections.find { |s| !s.title }
+        if anonymous_section
+          @sections.delete anonymous_section
+          @sections << anonymous_section
+        end
+      end
       self.render_template(template_file, binding(), outfile)
     end
   end
@@ -339,23 +347,23 @@ class RDoc::Generator::Babel
   # with alias information and link to ancestor method/attribute.
 
   def description(method)
-    desc = method.documented? ? method.description.strip : ''
+    desc = method.documented? ? method.description.strip : +''
     if method.is_alias_for
-      text = method.is_alias_for.documented? ? '<p>' : '<p class="nodoc">'
+      text = method.is_alias_for.documented? ? +'<p>' : +'<p class="nodoc">'
       text << 'Alias for ' << link(method, method.is_alias_for) << '</p>'
       append_with_nl desc, text
     end
     if method.see &&
         (@see_standard_ancestors ||
          method.see.parent.full_name !~ /^(Object|Kernel)$/)
-      text = method.see.documented? ? '<p>' : '<p class="nodoc">'
+      text = method.see.documented? ? +'<p>' : +'<p class="nodoc">'
       text << (desc.empty? ? 'See ' : 'See also ')
       text << link(method, method.see) << '</p>'
       append_with_nl desc, text
     end
     desc = '<p class="nodoc">(not documented)</p>' if desc.empty?
     unless method.aliases.empty?
-      text = '<p>Also aliased as '
+      text = +'<p>Also aliased as '
       text << method.aliases.map { |a| link(method, a) }.join(', ') << '</p>'
       append_with_nl desc, text
     end
@@ -465,6 +473,17 @@ class RDoc::Generator::Babel
     h(text).tr("\001\002\003\004", '&<>"').gsub("\n", '<br/>')
   end
 
+  # Returns a Hash { section => [methods] } for the current class methods +methods+.
+
+  def section_methods_hash(methods)
+    h = methods.group_by(&:section)
+
+    @sections.to_h do |section|
+      [section, h[section]]
+    end
+    .compact
+  end
+
 protected
 
   # Renders the erb template in +template_file+ within the
@@ -553,6 +572,7 @@ protected
   # and a final trailing newline.
 
   def append_with_nl(base, add)
+    base = +base
     base.strip!
     base.sub!(/\S\z/, "\\&\n")
     base << add

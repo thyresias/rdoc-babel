@@ -544,6 +544,18 @@ p#file-info {
 #method-list li a {
   padding: 0 4px 2px 4px; /* TRBL */
 }
+/* when there are sections: */
+#method-list .section-methods p.methods-section {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 1.5ex;
+  font-size: 9.5pt;
+}
+#method-list .section-methods ul {
+  display: inline-block;
+  margin-top: 0;
+  margin-left: 1ex;
+}
 
 /* mixed class/module lists */
 
