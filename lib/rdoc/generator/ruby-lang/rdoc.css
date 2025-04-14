@@ -266,9 +266,11 @@ h4, h5, h6 {
   border: none;
 }
 
+/* links inside headings: keep blue
 h1 a, h2 a, h3 a {
-  color: #e62020; /* not the best, but no other idea */
+  color: #e62020;
 }
+*/
 
 h1 { font-size: 230%; }
 h2 { font-size: 180%; }
@@ -545,16 +547,10 @@ p#file-info {
   padding: 0 4px 2px 4px; /* TRBL */
 }
 /* when there are sections: */
-#method-list .section-methods p.methods-section {
-  display: inline-block;
-  margin-top: 0;
-  margin-left: 1.5ex;
+#method-list li.section-title {
+  font-family: var(--default-font);
   font-size: 9.5pt;
-}
-#method-list .section-methods ul {
-  display: inline-block;
-  margin-top: 0;
-  margin-left: 1ex;
+  margin-right: 1ex;
 }
 
 /* mixed class/module lists */

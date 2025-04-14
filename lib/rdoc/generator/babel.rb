@@ -23,6 +23,15 @@ class RDoc::Markup::ToHtml
   end
 
 end
+
+class RDoc::Alias
+  # restore full_old_name (RDoc >= 6.13)
+  unless instance_methods.include?(:full_old_name)
+    def full_old_name
+      @full_name || "#{parent.name}#{pretty_old_name}"
+    end
+  end
+end
 # :startdoc:
 
 ##
@@ -33,7 +42,7 @@ class RDoc::Generator::Babel
 
   RDoc::RDoc.add_generator(self)
 
-  VERSION = '1.5.0'
+  VERSION = '1.5.1'
   DESCRIPTION = 'Alternate HTML documentation'
 
   include ERB::Util

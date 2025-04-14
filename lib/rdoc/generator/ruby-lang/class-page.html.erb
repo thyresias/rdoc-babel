@@ -82,20 +82,16 @@
   <% unless @class.instance_methods.empty?
        section_hash = section_methods_hash(@class.instance_methods)
        has_sections = section_hash.size > 1 || section_hash.keys.first.title
-       section_hash.each do |section, methods|
-        if has_sections %>
-    <div class="section-methods">
-    <p class="methods-section"><%= section.title || 'Other' %></p>
-       <% end %>
+       section_hash.each do |section, methods| %>
     <ul>
+       <% if has_sections %>
+      <li class="section-title"><%= section.title || 'Other' %></li>
+       <% end %>
       <% methods.sort.each do |m| %>
       <% litag = m.documented? ? '<li>' : '<li class="nodoc">' %>
       <%= litag %><a href="#<%= m.aref %>"><span class="type"><%= @options.show_hash ? '#' : '' %></span><%= h m.name %></a></li>
       <% end %>
     </ul>
-      <% if has_sections %>
-    </div>
-      <% end %>
     <% end %>
   <% end %>
 </div>

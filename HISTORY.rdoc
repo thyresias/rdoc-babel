@@ -1,6 +1,11 @@
+=== 1.5.1
+
+* tune the HTML & CSS
+* support RDoc 6.13.1
+
 === 1.5.0
 
-* add support for RDoc section directive for instance methods.
+* add support for RDoc <tt>:section:</tt> directive (instance methods only).
 
 === 1.4.2
 
