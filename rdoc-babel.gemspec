@@ -20,14 +20,14 @@ end
 
 def h.runtime_deps
   %w(
-    rdoc ~> 6.3
+    rdoc ~> 6.12
   )
 end
 
 def h.dev_deps
   %w(
-    minitest ~> 5.14
-    nokogiri ~> 1.10
+    minitest ~> 5.25
+    nokogiri ~> 1.18
   )
 end
 

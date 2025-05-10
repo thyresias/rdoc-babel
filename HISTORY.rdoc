@@ -1,3 +1,8 @@
+=== 1.5.2
+
+* tune the CSS
+* fix the tests
+
 === 1.5.1
 
 * tune the HTML & CSS

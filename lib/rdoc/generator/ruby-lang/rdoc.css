@@ -10,6 +10,7 @@
   --index-background: #f5f5f5;  /* pale grey */
   --pre-background: #f8f8f8;  /* very pale grey */
   --code-background: #f4f4f4;  /* pale grey */
+  --table-header-background: #eee;
   --current-index-link-color: firebrick;
   --current-index-link-background: #fcfcfc;
 }
@@ -33,7 +34,7 @@ pre, p, h1, h2, h3, h4, h5, h6, ul, ol, dl {
   margin-top: 1ex;
 }
 
-td {
+td, th {
   vertical-align: baseline;
   padding-right: 1ex;
 }
@@ -79,8 +80,23 @@ table {
   margin-top: 1ex;
 }
 
+th {
+  text-align: left;
+  font-weight: bold;
+}
+
 td p {
   margin-top: 0.5ex;
+}
+
+table[role="table"] th, table[role="table"] td {
+  padding: 0px 2px;
+  border: 1px solid #ddd;
+}
+
+table[role="table"] th {
+  font-weight: normal;
+  background-color: var(--table-header-background);
 }
 
 hr {
